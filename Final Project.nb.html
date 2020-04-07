@@ -230,11 +230,34 @@ summary {
 <!-- rnb-text-begin -->
 <div id="guided-question" class="section level1">
 <h1>Guided question</h1>
-<p>Was a 2019 MLB player’s batting ability affected by his age? I will be taking a look at several different batting statistics compared to each players age, to see if there was any correlation apparent between the two.</p>
+<p>Was a 2019 MLB player’s batting ability affected by his age? I will be taking a look at several different batting statistics compared to each player’s age, to see if there was any correlation apparent between the two.</p>
+</div>
+<div id="getting-acquainted-with-my-data-sources" class="section level1">
+<h1>Getting acquainted with my data sources</h1>
+<div id="where-did-you-find-them" class="section level3">
+<h3>Where did you find them?</h3>
+<p>All of my data will be gathered from baseballreference.com. They have a way that allows you to copy and paste data as .csv, which will make importing it into R so much easier.</p>
+</div>
+<div id="who-collectedmaintains-them" class="section level3">
+<h3>Who collected/maintains them?</h3>
+<p>Baseball reference is run by several moderators at the site. They gather this either by watching games, or taking the data from other websites. Sports data is fairly well-kept on the internet.</p>
+</div>
+<div id="when-and-why-were-they-originally-collected" class="section level3">
+<h3>When and why were they originally collected?</h3>
+<p>They were originally collected because sports fans love to read and interpret statistics from each player. This specific data set I will be using was collected during the 2019 Major League Baseball season.</p>
+</div>
+<div id="what-does-a-case-represent-in-each-data-source-and-how-many-total-cases-are-available" class="section level3">
+<h3>What does a case represent in each data source, and how many total cases are available?</h3>
+<p>Each case is represented by an individual player. In the final version of my project, I will have players from all 30 MLB teams. For the time being however, I am just working with players from the Baltimore Orioles. For now, this data set has 58 cases.</p>
+</div>
+<div id="what-are-some-of-the-variables-that-you-plan-to-use" class="section level3">
+<h3>What are some of the variables that you plan to use?</h3>
+<p>I plan to look at player names, teams, age, hits, home runs, RBIs, stolen bases, on-base percentage, and OPS+</p>
 <!-- rnb-text-end -->
 </div>
+</div>
 
-<div id="rmd-source-code">LS0tCnRpdGxlOiAiRmluYWwgcHJvamVjdCIKYXV0aG9yOiAiUmljaGFyZCBTbWVsdHplciIKb3V0cHV0OiBodG1sX25vdGVib29rCi0tLQoKIyBHdWlkZWQgcXVlc3Rpb24KV2FzIGEgMjAxOSBNTEIgcGxheWVyJ3MgYmF0dGluZyBhYmlsaXR5IGFmZmVjdGVkIGJ5IGhpcyBhZ2U/IEkgd2lsbCBiZSB0YWtpbmcgYSBsb29rIGF0IHNldmVyYWwgZGlmZmVyZW50IGJhdHRpbmcgc3RhdGlzdGljcyBjb21wYXJlZCB0byBlYWNoIHBsYXllcnMgYWdlLCB0byBzZWUgaWYgdGhlcmUgd2FzIGFueSBjb3JyZWxhdGlvbiBhcHBhcmVudCBiZXR3ZWVuIHRoZSB0d28uCgo=</div>
+<div id="rmd-source-code">LS0tCnRpdGxlOiAiRmluYWwgcHJvamVjdCIKYXV0aG9yOiAiUmljaGFyZCBTbWVsdHplciIKb3V0cHV0OiBodG1sX25vdGVib29rCi0tLQoKIyBHdWlkZWQgcXVlc3Rpb24KV2FzIGEgMjAxOSBNTEIgcGxheWVyJ3MgYmF0dGluZyBhYmlsaXR5IGFmZmVjdGVkIGJ5IGhpcyBhZ2U/IEkgd2lsbCBiZSB0YWtpbmcgYSBsb29rIGF0IHNldmVyYWwgZGlmZmVyZW50IGJhdHRpbmcgc3RhdGlzdGljcyBjb21wYXJlZCB0byBlYWNoIHBsYXllcidzIGFnZSwgdG8gc2VlIGlmIHRoZXJlIHdhcyBhbnkgY29ycmVsYXRpb24gYXBwYXJlbnQgYmV0d2VlbiB0aGUgdHdvLiAKCiMgR2V0dGluZyBhY3F1YWludGVkIHdpdGggbXkgZGF0YSBzb3VyY2VzCgojIyMgV2hlcmUgZGlkIHlvdSBmaW5kIHRoZW0/CkFsbCBvZiBteSBkYXRhIHdpbGwgYmUgZ2F0aGVyZWQgZnJvbSBiYXNlYmFsbHJlZmVyZW5jZS5jb20uIFRoZXkgaGF2ZSBhIHdheSB0aGF0IGFsbG93cyB5b3UgdG8gY29weSBhbmQgcGFzdGUgZGF0YSBhcyAuY3N2LCB3aGljaCB3aWxsIG1ha2UgaW1wb3J0aW5nIGl0IGludG8gUiBzbyBtdWNoIGVhc2llci4KCiMjIyBXaG8gY29sbGVjdGVkL21haW50YWlucyB0aGVtPwpCYXNlYmFsbCByZWZlcmVuY2UgaXMgcnVuIGJ5IHNldmVyYWwgbW9kZXJhdG9ycyBhdCB0aGUgc2l0ZS4gVGhleSBnYXRoZXIgdGhpcyBlaXRoZXIgYnkgd2F0Y2hpbmcgZ2FtZXMsIG9yIHRha2luZyB0aGUgZGF0YSBmcm9tIG90aGVyIHdlYnNpdGVzLiBTcG9ydHMgZGF0YSBpcyBmYWlybHkgd2VsbC1rZXB0IG9uIHRoZSBpbnRlcm5ldC4KCiMjIyBXaGVuIGFuZCB3aHkgd2VyZSB0aGV5IG9yaWdpbmFsbHkgY29sbGVjdGVkPwpUaGV5IHdlcmUgb3JpZ2luYWxseSBjb2xsZWN0ZWQgYmVjYXVzZSBzcG9ydHMgZmFucyBsb3ZlIHRvIHJlYWQgYW5kIGludGVycHJldCBzdGF0aXN0aWNzIGZyb20gZWFjaCBwbGF5ZXIuIFRoaXMgc3BlY2lmaWMgZGF0YSBzZXQgSSB3aWxsIGJlIHVzaW5nIHdhcyBjb2xsZWN0ZWQgZHVyaW5nIHRoZSAyMDE5IE1ham9yIExlYWd1ZSBCYXNlYmFsbCBzZWFzb24uCgojIyMgV2hhdCBkb2VzIGEgY2FzZSByZXByZXNlbnQgaW4gZWFjaCBkYXRhIHNvdXJjZSwgYW5kIGhvdyBtYW55IHRvdGFsIGNhc2VzIGFyZSBhdmFpbGFibGU/CkVhY2ggY2FzZSBpcyByZXByZXNlbnRlZCBieSBhbiBpbmRpdmlkdWFsIHBsYXllci4gSW4gdGhlIGZpbmFsIHZlcnNpb24gb2YgbXkgcHJvamVjdCwgSSB3aWxsIGhhdmUgcGxheWVycyBmcm9tIGFsbCAzMCBNTEIgdGVhbXMuIEZvciB0aGUgdGltZSBiZWluZyBob3dldmVyLCBJIGFtIGp1c3Qgd29ya2luZyB3aXRoIHBsYXllcnMgZnJvbSB0aGUgQmFsdGltb3JlIE9yaW9sZXMuIEZvciBub3csIHRoaXMgZGF0YSBzZXQgaGFzIDU4IGNhc2VzLgoKIyMjIFdoYXQgYXJlIHNvbWUgb2YgdGhlIHZhcmlhYmxlcyB0aGF0IHlvdSBwbGFuIHRvIHVzZT8KSSBwbGFuIHRvIGxvb2sgYXQgcGxheWVyIG5hbWVzLCB0ZWFtcywgYWdlLCBoaXRzLCBob21lIHJ1bnMsIFJCSXMsIHN0b2xlbiBiYXNlcywgb24tYmFzZSBwZXJjZW50YWdlLCBhbmQgT1BTKwoK</div>
 
 
 

@@ -5,5 +5,22 @@ output: html_notebook
 ---
 
 # Guided question
-Was a 2019 MLB player's batting ability affected by his age? I will be taking a look at several different batting statistics compared to each players age, to see if there was any correlation apparent between the two.
+Was a 2019 MLB player's batting ability affected by his age? I will be taking a look at several different batting statistics compared to each player's age, to see if there was any correlation apparent between the two. 
+
+# Getting acquainted with my data sources
+
+### Where did you find them?
+All of my data will be gathered from baseballreference.com. They have a way that allows you to copy and paste data as .csv, which will make importing it into R so much easier.
+
+### Who collected/maintains them?
+Baseball reference is run by several moderators at the site. They gather this either by watching games, or taking the data from other websites. Sports data is fairly well-kept on the internet.
+
+### When and why were they originally collected?
+They were originally collected because sports fans love to read and interpret statistics from each player. This specific data set I will be using was collected during the 2019 Major League Baseball season.
+
+### What does a case represent in each data source, and how many total cases are available?
+Each case is represented by an individual player. In the final version of my project, I will have players from all 30 MLB teams. For the time being however, I am just working with players from the Baltimore Orioles. For now, this data set has 58 cases.
+
+### What are some of the variables that you plan to use?
+I plan to look at player names, teams, age, hits, home runs, RBIs, stolen bases, on-base percentage, and OPS+
 

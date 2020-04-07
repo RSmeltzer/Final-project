@@ -1,0 +1,9 @@
+---
+title: "Final project"
+author: "Richard Smeltzer"
+output: html_notebook
+---
+
+# Guided question
+Was a 2019 MLB player's batting ability affected by his age? I will be taking a look at several different batting statistics compared to each players age, to see if there was any correlation apparent between the two.
+

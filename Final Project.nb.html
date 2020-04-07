@@ -234,30 +234,246 @@ summary {
 </div>
 <div id="getting-acquainted-with-my-data-sources" class="section level1">
 <h1>Getting acquainted with my data sources</h1>
-<div id="where-did-you-find-them" class="section level3">
-<h3>Where did you find them?</h3>
+<div id="where-did-you-find-them" class="section level2">
+<h2>Where did you find them?</h2>
 <p>All of my data will be gathered from baseballreference.com. They have a way that allows you to copy and paste data as .csv, which will make importing it into R so much easier.</p>
-</div>
 <div id="who-collectedmaintains-them" class="section level3">
 <h3>Who collected/maintains them?</h3>
 <p>Baseball reference is run by several moderators at the site. They gather this either by watching games, or taking the data from other websites. Sports data is fairly well-kept on the internet.</p>
 </div>
-<div id="when-and-why-were-they-originally-collected" class="section level3">
-<h3>When and why were they originally collected?</h3>
+</div>
+<div id="when-and-why-were-they-originally-collected" class="section level2">
+<h2>When and why were they originally collected?</h2>
 <p>They were originally collected because sports fans love to read and interpret statistics from each player. This specific data set I will be using was collected during the 2019 Major League Baseball season.</p>
 </div>
-<div id="what-does-a-case-represent-in-each-data-source-and-how-many-total-cases-are-available" class="section level3">
-<h3>What does a case represent in each data source, and how many total cases are available?</h3>
+<div id="what-does-a-case-represent-in-each-data-source-and-how-many-total-cases-are-available" class="section level2">
+<h2>What does a case represent in each data source, and how many total cases are available?</h2>
 <p>Each case is represented by an individual player. In the final version of my project, I will have players from all 30 MLB teams. For the time being however, I am just working with players from the Baltimore Orioles. For now, this data set has 58 cases.</p>
 </div>
-<div id="what-are-some-of-the-variables-that-you-plan-to-use" class="section level3">
-<h3>What are some of the variables that you plan to use?</h3>
-<p>I plan to look at player names, teams, age, hits, home runs, RBIs, stolen bases, on-base percentage, and OPS+</p>
+<div id="what-are-some-of-the-variables-that-you-plan-to-use" class="section level2">
+<h2>What are some of the variables that you plan to use?</h2>
+<p>I plan to look at player ages, hits, home runs, RBIs, stolen bases, on-base percentage, and OPS+</p>
+</div>
+</div>
+<div id="explore-intuition-relating-to-research-question" class="section level1">
+<h1>Explore intuition relating to research question</h1>
+<div id="reading-libraries-to-use" class="section level2">
+<h2>Reading libraries to use</h2>
 <!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeShtb3NhaWMpXG5saWJyYXJ5KHRpZHl2ZXJzZSlcbmxpYnJhcnkobW9zYWljRGF0YSlcbmxpYnJhcnkoZ2dwbG90MilcbmxpYnJhcnkoRGF0YUNvbXB1dGluZylcbmxpYnJhcnkobHVicmlkYXRlKVxubGlicmFyeShyZWFkcilcbmBgYCJ9 -->
+<pre class="r"><code>library(mosaic)
+library(tidyverse)
+library(mosaicData)
+library(ggplot2)
+library(DataComputing)
+library(lubridate)
+library(readr)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+</div>
+<div id="inputting-data" class="section level2">
+<h2>Inputting data</h2>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuT3Jpb2xlcyA8LVxuICByZWFkX2NzdihcIkFnZSxILEhSLFJCSSxTQixPQlAsT1BTcGx1c1xuLCwsLCwsXG4yNSw3NiwxMyw0NCwzLC4zMjEsOTVcbjMzLDU1LDEyLDM2LDAsLjI3Niw2MFxuMjgsMTc2LDI0LDczLDQwLC4zMzksMTA5XG4yNCw1OSw2LDIzLDEwLC4yNjAsNTRcbjI1LDg2LDEyLDQ2LDAsLjMwNiw4MVxuMjYsODYsMTMsNTMsNSwuMjk3LDg2XG4yNyw3NCwxMCwzNSwzLC4yODYsNzZcbjI3LDE3NSwzNSw5NywxLC4zNjQsMTM1XG4yNSwxMzIsMzEsOTAsMSwuMzExLDEwMVxuMjYsMTYwLDEyLDUxLDQsLjMyOSw5OFxuMjQsOTksMjAsNTksMSwuMjk3LDEwMVxuMjQsMzUsOCwyMCwwLC4zMzMsOTRcbjI1LDMwLDQsMTUsMSwuMzE3LDg1XG4yOCwyNCwyLDYsMywuMzA0LDc0XG4yOSwyMSw0LDksNCwuMjYxLDYxXG4yOSwyMiwyLDExLDQsLjI2OSw1OVxuMjMsMjEsNCwxMywyLC4zNzMsMTQ3XG4yNCw2LDAsNCwxLC4xODEsLThcbjI4LDE1LDEsNSwwLC4yNDcsMzlcbjMxLDEzLDAsMywwLC4yNjksMzlcbjI3LDgsMCwyLDEsLjMyNCw2OVxuMzMsNSwwLDMsMCwuMjI2LDMzXG4yNSwwLDAsMCwwLC4yNTAsLTIyXG4yNSwwLDAsMCwwLC4wMDAsLTEwMFxuMjUsMCwwLDAsMCwuMDAwLC0xMDBcbjI5LDAsMCwwLDAsLjAwMCwtMTAwXG4zMiwwLDAsMCwwLC4wMDAsLTEwMFxuMjYsMSwwLDAsMCwxLjAwMCw0MzlcbjI1LDAsMCwwLDAsLjAwMCwtMTAwXG4yNiwwLDAsMCwwLC4wMDAsLTEwMFxuMzAsMCwwLDAsMCwuMDAwLC0xMDBcbjI2LDAsMCwwLDAsLFxuMjcsMCwwLDAsMCwsXG4zMiwwLDAsMCwwLCxcbjI4LDAsMCwwLDAsLFxuMjksMCwwLDAsMCwsXG4yNCwwLDAsMCwwLCxcbjI1LDAsMCwwLDAsLFxuMjcsMCwwLDAsMCwsXG4yNywwLDAsMCwwLCxcbjI3LDAsMCwwLDAsLFxuMjcsMCwwLDAsMCwsXG4zMCwwLDAsMCwwLCxcbjI1LDAsMCwwLDAsLFxuMjUsMCwwLDAsMCwsXG4yNiwwLDAsMCwwLCxcbjI4LDAsMCwwLDAsLFxuMjYsMCwwLDAsMCwsXG4zMSwwLDAsMCwwLCxcbjI0LDAsMCwwLDAsLFxuMjksMCwwLDAsMCwsXG4yNCwwLDAsMCwwLCxcbjI4LDAsMCwwLDAsLFxuMzEsMCwwLDAsMCwsXG4yNCwwLDAsMCwwLCxcbjI0LDAsMCwwLDAsLFxuMjksMCwwLDAsMCwsXG4yMywwLDAsMCwwLCxcIilcbmBgYCJ9 -->
+<pre class="r"><code>Orioles &lt;-
+  read_csv(&quot;Age,H,HR,RBI,SB,OBP,OPSplus
+,,,,,,
+25,76,13,44,3,.321,95
+33,55,12,36,0,.276,60
+28,176,24,73,40,.339,109
+24,59,6,23,10,.260,54
+25,86,12,46,0,.306,81
+26,86,13,53,5,.297,86
+27,74,10,35,3,.286,76
+27,175,35,97,1,.364,135
+25,132,31,90,1,.311,101
+26,160,12,51,4,.329,98
+24,99,20,59,1,.297,101
+24,35,8,20,0,.333,94
+25,30,4,15,1,.317,85
+28,24,2,6,3,.304,74
+29,21,4,9,4,.261,61
+29,22,2,11,4,.269,59
+23,21,4,13,2,.373,147
+24,6,0,4,1,.181,-8
+28,15,1,5,0,.247,39
+31,13,0,3,0,.269,39
+27,8,0,2,1,.324,69
+33,5,0,3,0,.226,33
+25,0,0,0,0,.250,-22
+25,0,0,0,0,.000,-100
+25,0,0,0,0,.000,-100
+29,0,0,0,0,.000,-100
+32,0,0,0,0,.000,-100
+26,1,0,0,0,1.000,439
+25,0,0,0,0,.000,-100
+26,0,0,0,0,.000,-100
+30,0,0,0,0,.000,-100
+26,0,0,0,0,,
+27,0,0,0,0,,
+32,0,0,0,0,,
+28,0,0,0,0,,
+29,0,0,0,0,,
+24,0,0,0,0,,
+25,0,0,0,0,,
+27,0,0,0,0,,
+27,0,0,0,0,,
+27,0,0,0,0,,
+27,0,0,0,0,,
+30,0,0,0,0,,
+25,0,0,0,0,,
+25,0,0,0,0,,
+26,0,0,0,0,,
+28,0,0,0,0,,
+26,0,0,0,0,,
+31,0,0,0,0,,
+24,0,0,0,0,,
+29,0,0,0,0,,
+24,0,0,0,0,,
+28,0,0,0,0,,
+31,0,0,0,0,,
+24,0,0,0,0,,
+24,0,0,0,0,,
+29,0,0,0,0,,
+23,0,0,0,0,,&quot;)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+</div>
+<div id="making-exploratory-charts" class="section level2">
+<h2>Making exploratory charts</h2>
+<div id="age-vs-hits" class="section level3">
+<h3>Age vs hits</h3>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuT3Jpb2xlcyAlPiVcbiAgZ2dwbG90KGFlcyh4PUFnZSwgeT1IKSkgK1xuICBnZW9tX3BvaW50KCkgKyBnZW9tX3Ntb290aChtZXRob2Q9XCJsbVwiKVxuYGBgIn0= -->
+<pre class="r"><code>Orioles %&gt;%
+  ggplot(aes(x=Age, y=H)) +
+  geom_point() + geom_smooth(method=&quot;lm&quot;)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+</div>
+<div id="age-vs-stolen-bases" class="section level3">
+<h3>Age vs stolen bases</h3>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuT3Jpb2xlcyAlPiVcbiAgZ2dwbG90KGFlcyh4PUFnZSwgeT1TQikpICtcbiAgZ2VvbV9wb2ludCgpICsgZ2VvbV9zbW9vdGgobWV0aG9kPVwibG1cIilcbmBgYCJ9 -->
+<pre class="r"><code>Orioles %&gt;%
+  ggplot(aes(x=Age, y=SB)) +
+  geom_point() + geom_smooth(method=&quot;lm&quot;)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+</div>
+<div id="age-vs-ops" class="section level3">
+<h3>Age vs OPS+</h3>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuT3Jpb2xlcyAlPiVcbiAgZ2dwbG90KGFlcyh4PUFnZSwgeT1PUFNwbHVzKSkgK1xuICBnZW9tX3BvaW50KCkgKyBnZW9tX3Ntb290aChtZXRob2Q9XCJsbVwiKVxuYGBgIn0= -->
+<pre class="r"><code>Orioles %&gt;%
+  ggplot(aes(x=Age, y=OPSplus)) +
+  geom_point() + geom_smooth(method=&quot;lm&quot;)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+</div>
+</div>
+<div id="description-of-preliminary-findings" class="section level2">
+<h2>Description of preliminary findings</h2>
+<p>I only looked at three of the variables vs. Age so far. When looking at hits, the trend seems to follow a negative correlation. The graphs for stolen bases and OPS+ seem to follow flat lines, but this could change when working with the complete data set.</p>
+</div>
+</div>
+<div id="data-sources-so-far" class="section level1">
+<h1>Data sources (so far)</h1>
+<div id="orioles" class="section level2">
+<h2>Orioles</h2>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuVmlldyhPcmlvbGVzKVxuYGBgIn0= -->
+<pre class="r"><code>View(Orioles)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+</div>
+<div id="bluejays" class="section level2">
+<h2>BlueJays</h2>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuQmx1ZUpheXMgPC1cbiAgcmVhZF9jc3YoXCJBZ2UsSCxIUixSQkksU0IsT0JQLE9QU3BsdXNcbiwsLCwsLFxuMjQsNzIsMTMsNDMsMCwuMjc5LDcwXG4zMiw4NiwyMiw2MSwwLC4zNDIsMTAxXG4yNCw4MywxNiw0OCwxNCwuMzY0LDExM1xuMjksMTIwLDE4LDU0LDQsLjI5OSw5NlxuMjAsMTI2LDE1LDY5LDAsLjMzOSwxMDZcbjI1LDg3LDIwLDUwLDYsLjMyNywxMjdcbjI2LDk2LDI2LDY1LDYsLjMwNiwxMDVcbjI3LDEzNiwzMSw4MCwyLC4yODAsOTNcbjI0LDg0LDIxLDU0LDEsLjI5Myw5NVxuMjYsOTEsMTUsNDEsMCwuMjYyLDcwXG4zMyw4NiwxMCwzMCw2LC4zNjMsMTIzXG4yNCw1NCwxMiwyOCwwLC4yNzQsODNcbjIxLDYxLDExLDIxLDQsLjM1OCwxNDRcbjI4LDE4LDIsOSwxLC4yMDUsMThcbjI1LDE1LDYsMTIsMSwuMjcxLDcyXG4yNCwyOSw1LDExLDAsLjM0NiwxMzBcbjI3LDE1LDIsNiwzLC4yNjYsNDRcbjIzLDE4LDAsNCwwLC4yNzMsNjBcbjI2LDcsMCw0LDEsLjIyOSw5XG4yNiwzLDAsMiwwLC4xNjMsLTE5XG4yNCw1LDEsMSwyLC4yMzMsMzlcbjMwLDEsMCwxLDAsLjA1OSwtNjdcbjI3LDQsMSwzLDAsLjI2NywxMDZcbjI5LDAsMCwwLDAsLjAwMCwtMTAwXG4yNSwwLDAsMCwwLC4zMzMsNFxuMjUsMiwwLDAsMCwuNjY3LDI2MlxuMzUsMCwwLDAsMCwuMDAwLC0xMDBcbjI2LDAsMCwwLDAsLjAwMCwtMTAwXG4yOCwwLDAsMCwwLC4wMDAsLTEwMFxuMTksMCwwLDAsMCwuMDAwLC0xMDBcbjIzLDAsMCwwLDAsLjAwMCwtMTAwXG4yMywwLDAsMCwwLC4wMDAsLTEwMFxuMjksMCwwLDAsMCwuMDAwLC0xMDBcbjI5LDAsMCwwLDAsLFxuMjcsMCwwLDAsMCwsXG4zMywwLDAsMCwwLCxcbjI5LDAsMCwwLDAsLFxuMzAsMCwwLDAsMCwsXG4zMywwLDAsMCwwLCxcbjI4LDAsMCwwLDAsLFxuMzQsMCwwLDAsMCwsXG4zMSwwLDAsMCwwLCxcbjMxLDAsMCwwLDAsLFxuMjcsMCwwLDAsMCwsXG4zMiwwLDAsMCwwLCxcbjIyLDAsMCwwLDAsLFxuMjcsMCwwLDAsMCwsXG4yNywwLDAsMCwwLCxcbjI3LDAsMCwwLDAsLFxuMjksMCwwLDAsMCwsXG4zMiwwLDAsMCwwLCxcbjI5LDAsMCwwLDAsLFxuMzEsMCwwLDAsMCwsXG4yNiwwLDAsMCwwLCxcbjMyLDAsMCwwLDAsLFxuMjQsMCwwLDAsMCwsXG4zNSwwLDAsMCwwLCxcbjI4LDAsMCwwLDAsLFxuMjUsMCwwLDAsMCwsXG4yNSwwLDAsMCwwLCxcbjI2LDAsMCwwLDAsLFwiKVxuYGBgIn0= -->
+<pre class="r"><code>BlueJays &lt;-
+  read_csv(&quot;Age,H,HR,RBI,SB,OBP,OPSplus
+,,,,,,
+24,72,13,43,0,.279,70
+32,86,22,61,0,.342,101
+24,83,16,48,14,.364,113
+29,120,18,54,4,.299,96
+20,126,15,69,0,.339,106
+25,87,20,50,6,.327,127
+26,96,26,65,6,.306,105
+27,136,31,80,2,.280,93
+24,84,21,54,1,.293,95
+26,91,15,41,0,.262,70
+33,86,10,30,6,.363,123
+24,54,12,28,0,.274,83
+21,61,11,21,4,.358,144
+28,18,2,9,1,.205,18
+25,15,6,12,1,.271,72
+24,29,5,11,0,.346,130
+27,15,2,6,3,.266,44
+23,18,0,4,0,.273,60
+26,7,0,4,1,.229,9
+26,3,0,2,0,.163,-19
+24,5,1,1,2,.233,39
+30,1,0,1,0,.059,-67
+27,4,1,3,0,.267,106
+29,0,0,0,0,.000,-100
+25,0,0,0,0,.333,4
+25,2,0,0,0,.667,262
+35,0,0,0,0,.000,-100
+26,0,0,0,0,.000,-100
+28,0,0,0,0,.000,-100
+19,0,0,0,0,.000,-100
+23,0,0,0,0,.000,-100
+23,0,0,0,0,.000,-100
+29,0,0,0,0,.000,-100
+29,0,0,0,0,,
+27,0,0,0,0,,
+33,0,0,0,0,,
+29,0,0,0,0,,
+30,0,0,0,0,,
+33,0,0,0,0,,
+28,0,0,0,0,,
+34,0,0,0,0,,
+31,0,0,0,0,,
+31,0,0,0,0,,
+27,0,0,0,0,,
+32,0,0,0,0,,
+22,0,0,0,0,,
+27,0,0,0,0,,
+27,0,0,0,0,,
+27,0,0,0,0,,
+29,0,0,0,0,,
+32,0,0,0,0,,
+29,0,0,0,0,,
+31,0,0,0,0,,
+26,0,0,0,0,,
+32,0,0,0,0,,
+24,0,0,0,0,,
+35,0,0,0,0,,
+28,0,0,0,0,,
+25,0,0,0,0,,
+25,0,0,0,0,,
+26,0,0,0,0,,&quot;)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
 </div>
 </div>
 
-<div id="rmd-source-code">LS0tCnRpdGxlOiAiRmluYWwgcHJvamVjdCIKYXV0aG9yOiAiUmljaGFyZCBTbWVsdHplciIKb3V0cHV0OiBodG1sX25vdGVib29rCi0tLQoKIyBHdWlkZWQgcXVlc3Rpb24KV2FzIGEgMjAxOSBNTEIgcGxheWVyJ3MgYmF0dGluZyBhYmlsaXR5IGFmZmVjdGVkIGJ5IGhpcyBhZ2U/IEkgd2lsbCBiZSB0YWtpbmcgYSBsb29rIGF0IHNldmVyYWwgZGlmZmVyZW50IGJhdHRpbmcgc3RhdGlzdGljcyBjb21wYXJlZCB0byBlYWNoIHBsYXllcidzIGFnZSwgdG8gc2VlIGlmIHRoZXJlIHdhcyBhbnkgY29ycmVsYXRpb24gYXBwYXJlbnQgYmV0d2VlbiB0aGUgdHdvLiAKCiMgR2V0dGluZyBhY3F1YWludGVkIHdpdGggbXkgZGF0YSBzb3VyY2VzCgojIyMgV2hlcmUgZGlkIHlvdSBmaW5kIHRoZW0/CkFsbCBvZiBteSBkYXRhIHdpbGwgYmUgZ2F0aGVyZWQgZnJvbSBiYXNlYmFsbHJlZmVyZW5jZS5jb20uIFRoZXkgaGF2ZSBhIHdheSB0aGF0IGFsbG93cyB5b3UgdG8gY29weSBhbmQgcGFzdGUgZGF0YSBhcyAuY3N2LCB3aGljaCB3aWxsIG1ha2UgaW1wb3J0aW5nIGl0IGludG8gUiBzbyBtdWNoIGVhc2llci4KCiMjIyBXaG8gY29sbGVjdGVkL21haW50YWlucyB0aGVtPwpCYXNlYmFsbCByZWZlcmVuY2UgaXMgcnVuIGJ5IHNldmVyYWwgbW9kZXJhdG9ycyBhdCB0aGUgc2l0ZS4gVGhleSBnYXRoZXIgdGhpcyBlaXRoZXIgYnkgd2F0Y2hpbmcgZ2FtZXMsIG9yIHRha2luZyB0aGUgZGF0YSBmcm9tIG90aGVyIHdlYnNpdGVzLiBTcG9ydHMgZGF0YSBpcyBmYWlybHkgd2VsbC1rZXB0IG9uIHRoZSBpbnRlcm5ldC4KCiMjIyBXaGVuIGFuZCB3aHkgd2VyZSB0aGV5IG9yaWdpbmFsbHkgY29sbGVjdGVkPwpUaGV5IHdlcmUgb3JpZ2luYWxseSBjb2xsZWN0ZWQgYmVjYXVzZSBzcG9ydHMgZmFucyBsb3ZlIHRvIHJlYWQgYW5kIGludGVycHJldCBzdGF0aXN0aWNzIGZyb20gZWFjaCBwbGF5ZXIuIFRoaXMgc3BlY2lmaWMgZGF0YSBzZXQgSSB3aWxsIGJlIHVzaW5nIHdhcyBjb2xsZWN0ZWQgZHVyaW5nIHRoZSAyMDE5IE1ham9yIExlYWd1ZSBCYXNlYmFsbCBzZWFzb24uCgojIyMgV2hhdCBkb2VzIGEgY2FzZSByZXByZXNlbnQgaW4gZWFjaCBkYXRhIHNvdXJjZSwgYW5kIGhvdyBtYW55IHRvdGFsIGNhc2VzIGFyZSBhdmFpbGFibGU/CkVhY2ggY2FzZSBpcyByZXByZXNlbnRlZCBieSBhbiBpbmRpdmlkdWFsIHBsYXllci4gSW4gdGhlIGZpbmFsIHZlcnNpb24gb2YgbXkgcHJvamVjdCwgSSB3aWxsIGhhdmUgcGxheWVycyBmcm9tIGFsbCAzMCBNTEIgdGVhbXMuIEZvciB0aGUgdGltZSBiZWluZyBob3dldmVyLCBJIGFtIGp1c3Qgd29ya2luZyB3aXRoIHBsYXllcnMgZnJvbSB0aGUgQmFsdGltb3JlIE9yaW9sZXMuIEZvciBub3csIHRoaXMgZGF0YSBzZXQgaGFzIDU4IGNhc2VzLgoKIyMjIFdoYXQgYXJlIHNvbWUgb2YgdGhlIHZhcmlhYmxlcyB0aGF0IHlvdSBwbGFuIHRvIHVzZT8KSSBwbGFuIHRvIGxvb2sgYXQgcGxheWVyIG5hbWVzLCB0ZWFtcywgYWdlLCBoaXRzLCBob21lIHJ1bnMsIFJCSXMsIHN0b2xlbiBiYXNlcywgb24tYmFzZSBwZXJjZW50YWdlLCBhbmQgT1BTKwoK</div>
+<div id="rmd-source-code">LS0tCnRpdGxlOiAiRmluYWwgcHJvamVjdCIKYXV0aG9yOiAiUmljaGFyZCBTbWVsdHplciIKb3V0cHV0OiBodG1sX25vdGVib29rCi0tLQoKIyBHdWlkZWQgcXVlc3Rpb24KV2FzIGEgMjAxOSBNTEIgcGxheWVyJ3MgYmF0dGluZyBhYmlsaXR5IGFmZmVjdGVkIGJ5IGhpcyBhZ2U/IEkgd2lsbCBiZSB0YWtpbmcgYSBsb29rIGF0IHNldmVyYWwgZGlmZmVyZW50IGJhdHRpbmcgc3RhdGlzdGljcyBjb21wYXJlZCB0byBlYWNoIHBsYXllcidzIGFnZSwgdG8gc2VlIGlmIHRoZXJlIHdhcyBhbnkgY29ycmVsYXRpb24gYXBwYXJlbnQgYmV0d2VlbiB0aGUgdHdvLiAKCgoKIyBHZXR0aW5nIGFjcXVhaW50ZWQgd2l0aCBteSBkYXRhIHNvdXJjZXMKCiMjIFdoZXJlIGRpZCB5b3UgZmluZCB0aGVtPwpBbGwgb2YgbXkgZGF0YSB3aWxsIGJlIGdhdGhlcmVkIGZyb20gYmFzZWJhbGxyZWZlcmVuY2UuY29tLiBUaGV5IGhhdmUgYSB3YXkgdGhhdCBhbGxvd3MgeW91IHRvIGNvcHkgYW5kIHBhc3RlIGRhdGEgYXMgLmNzdiwgd2hpY2ggd2lsbCBtYWtlIGltcG9ydGluZyBpdCBpbnRvIFIgc28gbXVjaCBlYXNpZXIuCgojIyMgV2hvIGNvbGxlY3RlZC9tYWludGFpbnMgdGhlbT8KQmFzZWJhbGwgcmVmZXJlbmNlIGlzIHJ1biBieSBzZXZlcmFsIG1vZGVyYXRvcnMgYXQgdGhlIHNpdGUuIFRoZXkgZ2F0aGVyIHRoaXMgZWl0aGVyIGJ5IHdhdGNoaW5nIGdhbWVzLCBvciB0YWtpbmcgdGhlIGRhdGEgZnJvbSBvdGhlciB3ZWJzaXRlcy4gU3BvcnRzIGRhdGEgaXMgZmFpcmx5IHdlbGwta2VwdCBvbiB0aGUgaW50ZXJuZXQuCgojIyBXaGVuIGFuZCB3aHkgd2VyZSB0aGV5IG9yaWdpbmFsbHkgY29sbGVjdGVkPwpUaGV5IHdlcmUgb3JpZ2luYWxseSBjb2xsZWN0ZWQgYmVjYXVzZSBzcG9ydHMgZmFucyBsb3ZlIHRvIHJlYWQgYW5kIGludGVycHJldCBzdGF0aXN0aWNzIGZyb20gZWFjaCBwbGF5ZXIuIFRoaXMgc3BlY2lmaWMgZGF0YSBzZXQgSSB3aWxsIGJlIHVzaW5nIHdhcyBjb2xsZWN0ZWQgZHVyaW5nIHRoZSAyMDE5IE1ham9yIExlYWd1ZSBCYXNlYmFsbCBzZWFzb24uCgojIyBXaGF0IGRvZXMgYSBjYXNlIHJlcHJlc2VudCBpbiBlYWNoIGRhdGEgc291cmNlLCBhbmQgaG93IG1hbnkgdG90YWwgY2FzZXMgYXJlIGF2YWlsYWJsZT8KRWFjaCBjYXNlIGlzIHJlcHJlc2VudGVkIGJ5IGFuIGluZGl2aWR1YWwgcGxheWVyLiBJbiB0aGUgZmluYWwgdmVyc2lvbiBvZiBteSBwcm9qZWN0LCBJIHdpbGwgaGF2ZSBwbGF5ZXJzIGZyb20gYWxsIDMwIE1MQiB0ZWFtcy4gRm9yIHRoZSB0aW1lIGJlaW5nIGhvd2V2ZXIsIEkgYW0ganVzdCB3b3JraW5nIHdpdGggcGxheWVycyBmcm9tIHRoZSBCYWx0aW1vcmUgT3Jpb2xlcy4gRm9yIG5vdywgdGhpcyBkYXRhIHNldCBoYXMgNTggY2FzZXMuCgojIyBXaGF0IGFyZSBzb21lIG9mIHRoZSB2YXJpYWJsZXMgdGhhdCB5b3UgcGxhbiB0byB1c2U/CkkgcGxhbiB0byBsb29rIGF0IHBsYXllciBhZ2VzLCBoaXRzLCBob21lIHJ1bnMsIFJCSXMsIHN0b2xlbiBiYXNlcywgb24tYmFzZSBwZXJjZW50YWdlLCBhbmQgT1BTKwoKCgojIEV4cGxvcmUgaW50dWl0aW9uIHJlbGF0aW5nIHRvIHJlc2VhcmNoIHF1ZXN0aW9uCgojIyBSZWFkaW5nIGxpYnJhcmllcyB0byB1c2UKYGBge3J9CmxpYnJhcnkobW9zYWljKQpsaWJyYXJ5KHRpZHl2ZXJzZSkKbGlicmFyeShtb3NhaWNEYXRhKQpsaWJyYXJ5KGdncGxvdDIpCmxpYnJhcnkoRGF0YUNvbXB1dGluZykKbGlicmFyeShsdWJyaWRhdGUpCmxpYnJhcnkocmVhZHIpCmBgYAoKIyMgSW5wdXR0aW5nIGRhdGEKYGBge3J9Ck9yaW9sZXMgPC0KICByZWFkX2NzdigiQWdlLEgsSFIsUkJJLFNCLE9CUCxPUFNwbHVzCiwsLCwsLAoyNSw3NiwxMyw0NCwzLC4zMjEsOTUKMzMsNTUsMTIsMzYsMCwuMjc2LDYwCjI4LDE3NiwyNCw3Myw0MCwuMzM5LDEwOQoyNCw1OSw2LDIzLDEwLC4yNjAsNTQKMjUsODYsMTIsNDYsMCwuMzA2LDgxCjI2LDg2LDEzLDUzLDUsLjI5Nyw4NgoyNyw3NCwxMCwzNSwzLC4yODYsNzYKMjcsMTc1LDM1LDk3LDEsLjM2NCwxMzUKMjUsMTMyLDMxLDkwLDEsLjMxMSwxMDEKMjYsMTYwLDEyLDUxLDQsLjMyOSw5OAoyNCw5OSwyMCw1OSwxLC4yOTcsMTAxCjI0LDM1LDgsMjAsMCwuMzMzLDk0CjI1LDMwLDQsMTUsMSwuMzE3LDg1CjI4LDI0LDIsNiwzLC4zMDQsNzQKMjksMjEsNCw5LDQsLjI2MSw2MQoyOSwyMiwyLDExLDQsLjI2OSw1OQoyMywyMSw0LDEzLDIsLjM3MywxNDcKMjQsNiwwLDQsMSwuMTgxLC04CjI4LDE1LDEsNSwwLC4yNDcsMzkKMzEsMTMsMCwzLDAsLjI2OSwzOQoyNyw4LDAsMiwxLC4zMjQsNjkKMzMsNSwwLDMsMCwuMjI2LDMzCjI1LDAsMCwwLDAsLjI1MCwtMjIKMjUsMCwwLDAsMCwuMDAwLC0xMDAKMjUsMCwwLDAsMCwuMDAwLC0xMDAKMjksMCwwLDAsMCwuMDAwLC0xMDAKMzIsMCwwLDAsMCwuMDAwLC0xMDAKMjYsMSwwLDAsMCwxLjAwMCw0MzkKMjUsMCwwLDAsMCwuMDAwLC0xMDAKMjYsMCwwLDAsMCwuMDAwLC0xMDAKMzAsMCwwLDAsMCwuMDAwLC0xMDAKMjYsMCwwLDAsMCwsCjI3LDAsMCwwLDAsLAozMiwwLDAsMCwwLCwKMjgsMCwwLDAsMCwsCjI5LDAsMCwwLDAsLAoyNCwwLDAsMCwwLCwKMjUsMCwwLDAsMCwsCjI3LDAsMCwwLDAsLAoyNywwLDAsMCwwLCwKMjcsMCwwLDAsMCwsCjI3LDAsMCwwLDAsLAozMCwwLDAsMCwwLCwKMjUsMCwwLDAsMCwsCjI1LDAsMCwwLDAsLAoyNiwwLDAsMCwwLCwKMjgsMCwwLDAsMCwsCjI2LDAsMCwwLDAsLAozMSwwLDAsMCwwLCwKMjQsMCwwLDAsMCwsCjI5LDAsMCwwLDAsLAoyNCwwLDAsMCwwLCwKMjgsMCwwLDAsMCwsCjMxLDAsMCwwLDAsLAoyNCwwLDAsMCwwLCwKMjQsMCwwLDAsMCwsCjI5LDAsMCwwLDAsLAoyMywwLDAsMCwwLCwiKQpgYGAKCiMjIE1ha2luZyBleHBsb3JhdG9yeSBjaGFydHMKIyMjIEFnZSB2cyBoaXRzCmBgYHtyfQpPcmlvbGVzICU+JQogIGdncGxvdChhZXMoeD1BZ2UsIHk9SCkpICsKICBnZW9tX3BvaW50KCkgKyBnZW9tX3Ntb290aChtZXRob2Q9ImxtIikKYGBgCgojIyMgQWdlIHZzIHN0b2xlbiBiYXNlcwpgYGB7cn0KT3Jpb2xlcyAlPiUKICBnZ3Bsb3QoYWVzKHg9QWdlLCB5PVNCKSkgKwogIGdlb21fcG9pbnQoKSArIGdlb21fc21vb3RoKG1ldGhvZD0ibG0iKQpgYGAKCiMjIyBBZ2UgdnMgT1BTKwpgYGB7cn0KT3Jpb2xlcyAlPiUKICBnZ3Bsb3QoYWVzKHg9QWdlLCB5PU9QU3BsdXMpKSArCiAgZ2VvbV9wb2ludCgpICsgZ2VvbV9zbW9vdGgobWV0aG9kPSJsbSIpCmBgYAoKIyMgRGVzY3JpcHRpb24gb2YgcHJlbGltaW5hcnkgZmluZGluZ3MKSSBvbmx5IGxvb2tlZCBhdCB0aHJlZSBvZiB0aGUgdmFyaWFibGVzIHZzLiBBZ2Ugc28gZmFyLiBXaGVuIGxvb2tpbmcgYXQgaGl0cywgdGhlIHRyZW5kIHNlZW1zIHRvIGZvbGxvdyBhIG5lZ2F0aXZlIGNvcnJlbGF0aW9uLiBUaGUgZ3JhcGhzIGZvciBzdG9sZW4gYmFzZXMgYW5kIE9QUysgc2VlbSB0byBmb2xsb3cgZmxhdCBsaW5lcywgYnV0IHRoaXMgY291bGQgY2hhbmdlIHdoZW4gd29ya2luZyB3aXRoIHRoZSBjb21wbGV0ZSBkYXRhIHNldC4KCgoKIyBEYXRhIHNvdXJjZXMgKHNvIGZhcikKCiMjIE9yaW9sZXMKYGBge3J9ClZpZXcoT3Jpb2xlcykKYGBgCgojIyBCbHVlSmF5cwpgYGB7cn0KQmx1ZUpheXMgPC0KICByZWFkX2NzdigiQWdlLEgsSFIsUkJJLFNCLE9CUCxPUFNwbHVzCiwsLCwsLAoyNCw3MiwxMyw0MywwLC4yNzksNzAKMzIsODYsMjIsNjEsMCwuMzQyLDEwMQoyNCw4MywxNiw0OCwxNCwuMzY0LDExMwoyOSwxMjAsMTgsNTQsNCwuMjk5LDk2CjIwLDEyNiwxNSw2OSwwLC4zMzksMTA2CjI1LDg3LDIwLDUwLDYsLjMyNywxMjcKMjYsOTYsMjYsNjUsNiwuMzA2LDEwNQoyNywxMzYsMzEsODAsMiwuMjgwLDkzCjI0LDg0LDIxLDU0LDEsLjI5Myw5NQoyNiw5MSwxNSw0MSwwLC4yNjIsNzAKMzMsODYsMTAsMzAsNiwuMzYzLDEyMwoyNCw1NCwxMiwyOCwwLC4yNzQsODMKMjEsNjEsMTEsMjEsNCwuMzU4LDE0NAoyOCwxOCwyLDksMSwuMjA1LDE4CjI1LDE1LDYsMTIsMSwuMjcxLDcyCjI0LDI5LDUsMTEsMCwuMzQ2LDEzMAoyNywxNSwyLDYsMywuMjY2LDQ0CjIzLDE4LDAsNCwwLC4yNzMsNjAKMjYsNywwLDQsMSwuMjI5LDkKMjYsMywwLDIsMCwuMTYzLC0xOQoyNCw1LDEsMSwyLC4yMzMsMzkKMzAsMSwwLDEsMCwuMDU5LC02NwoyNyw0LDEsMywwLC4yNjcsMTA2CjI5LDAsMCwwLDAsLjAwMCwtMTAwCjI1LDAsMCwwLDAsLjMzMyw0CjI1LDIsMCwwLDAsLjY2NywyNjIKMzUsMCwwLDAsMCwuMDAwLC0xMDAKMjYsMCwwLDAsMCwuMDAwLC0xMDAKMjgsMCwwLDAsMCwuMDAwLC0xMDAKMTksMCwwLDAsMCwuMDAwLC0xMDAKMjMsMCwwLDAsMCwuMDAwLC0xMDAKMjMsMCwwLDAsMCwuMDAwLC0xMDAKMjksMCwwLDAsMCwuMDAwLC0xMDAKMjksMCwwLDAsMCwsCjI3LDAsMCwwLDAsLAozMywwLDAsMCwwLCwKMjksMCwwLDAsMCwsCjMwLDAsMCwwLDAsLAozMywwLDAsMCwwLCwKMjgsMCwwLDAsMCwsCjM0LDAsMCwwLDAsLAozMSwwLDAsMCwwLCwKMzEsMCwwLDAsMCwsCjI3LDAsMCwwLDAsLAozMiwwLDAsMCwwLCwKMjIsMCwwLDAsMCwsCjI3LDAsMCwwLDAsLAoyNywwLDAsMCwwLCwKMjcsMCwwLDAsMCwsCjI5LDAsMCwwLDAsLAozMiwwLDAsMCwwLCwKMjksMCwwLDAsMCwsCjMxLDAsMCwwLDAsLAoyNiwwLDAsMCwwLCwKMzIsMCwwLDAsMCwsCjI0LDAsMCwwLDAsLAozNSwwLDAsMCwwLCwKMjgsMCwwLDAsMCwsCjI1LDAsMCwwLDAsLAoyNSwwLDAsMCwwLCwKMjYsMCwwLDAsMCwsIikKYGBg</div>
 
 
 

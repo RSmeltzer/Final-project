@@ -481,8 +481,11 @@ allTeams %>%
   mutate(count = n()) %>%
   filter(count >= 5) %>%
   ggplot(aes(x = Age, y = OPSplus, group = Age)) +
-  geom_boxplot()
+  geom_boxplot() + theme(axis.text.x = element_text(angle = 30, hjust = 1))
 ```
 Now we can see the information we really want. Grouping the general population by age and checking to see the OPS+ with respect to these groups allows us to see the differences going on here.
 
 # Concluding analysis
+In conclusion, it seems as though age does not have much of an effect on a baseball player's hitting ability. The chart we generated shows some minor changes. It seems generally however, that older players tend to have better batting statistics, though this could be caused by some external factors. A player who sticks around into his older-aged years has to be good enough to be able to make it that far. Because of this, it makes sense that they would be better hitters. In addition to this, it is possible that having more experience in the league allows a player to have more time to get better at hitting. 
+
+It really isn't fair to draw these conclusions based on the data we have visualized. Since there is extremely little variability between OPS+ and each player's age, there is no way that we can make any comments based on this. Instead, we must assume that a player's age has no effect on his hitting ability.

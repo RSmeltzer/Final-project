@@ -385,8 +385,6 @@ BlueJays %>%
 ```
 
 # Data Wrangling
-
-## Joining
 In order to make further judgements of my data, I need to do some data wrangling. In order to do this, I will be joining all five data sets together into one big set. I will do this using the rbind function, as it lets me merge them all in one step. I will be adding a variable called "Team" that will represent each players' team name. I will also be dropping any cases that have an "NA" value, as they will not help our study.
 
 #### Adding team name to each data set
@@ -425,3 +423,25 @@ allTeams <-
 
 allTeams
 ```
+
+#### Finding average of each stat per team
+```{r}
+teamsAvg <-
+  allTeams %>%
+  group_by(Team) %>%
+  summarise(avgAge = mean(Age), avgHits = mean(H), avgPA = mean(PA), avgHR = mean(HR), avgRBI = mean(RBI), avgSB = mean(SB), avgOBP = mean(OBP), avgOPSplus = mean(OPSplus))
+
+teamsAvg
+```
+
+#### Finding averages by ages
+```{r}
+agesAvg <-
+  allTeams %>%
+  group_by(Age) %>%
+  summarise(avgHits = mean(H), avgPA = mean(PA), avgHR = mean(HR), avgRBI = mean(RBI), avgSB = mean(SB), avgOBP = mean(OBP), avgOPSplus = mean(OPSplus))
+
+agesAvg
+```
+
+# Data Visualization

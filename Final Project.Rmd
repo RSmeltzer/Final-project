@@ -11,9 +11,9 @@ To be more specific, I will be looking at each team in the American League East 
 
 
 # Importing data
-For this project, I will be using data from baseball-reference.com for each of these teams. From there, I can manipulate their tables and get the data I want in the form of .csv data. From there, I can use the "readr" package to copy and paste the data from the website, and read it into R as .csv data.
+For this project, I will be using data from baseball-reference.com for each of these teams. From there, I can manipulate their tables and get the data I want in the form of .csv data. From there, I can use the "readr" package to copy and paste the data from the website, and read it into R as .csv data. In order to prevent confusion when using the data further on, I had to change the name of "OPS+" to "OPSplus."
 
-### Reading libraries to use
+#### Reading libraries to use
 ```{r}
 library(mosaic)
 library(tidyverse)
@@ -24,10 +24,10 @@ library(lubridate)
 library(readr)
 ```
 
-### Inputting data from Baltimore Orioles
+#### Inputting data from Baltimore Orioles
 ```{r}
 Orioles <-
-  read_csv("Age,PA,H,HR,RBI,SB,OBP,OPS+
+  read_csv("Age,PA,H,HR,RBI,SB,OBP,OPSplus
 ,,,,,,,
 25,341,76,13,44,3,.321,95
 33,352,55,12,36,0,.276,60
@@ -89,10 +89,10 @@ Orioles <-
 23,0,0,0,0,0,,")
 ```
 
-### Inputting data from Boston Red Sox
+#### Inputting data from Boston Red Sox
 ```{r}
 RedSox <-
-  read_csv("Age,PA,H,HR,RBI,SB,OBP,OPS+
+  read_csv("Age,PA,H,HR,RBI,SB,OBP,OPSplus
 ,,,,,,,
 28,521,133,23,72,4,.320,103
 33,335,75,19,58,1,.328,112
@@ -143,10 +143,10 @@ RedSox <-
 31,0,0,0,0,0,,")
 ```
 
-### Inputting data from New York Yankees
+#### Inputting data from New York Yankees
 ```{r}
 Yankees <-
-  read_csv("Age,PA,H,HR,RBI,SB,OBP,OPS+
+  read_csv("Age,PA,H,HR,RBI,SB,OBP,OPSplus
 ,,,,,,,
 26,446,92,34,77,0,.316,119
 28,510,113,21,62,0,.378,124
@@ -204,10 +204,10 @@ Yankees <-
 33,0,0,0,0,0,,")
 ```
 
-### Inputting data from Tampa Bay Rays
+#### Inputting data from Tampa Bay Rays
 ```{r}
 Rays <-
-  read_csv("Age,PA,H,HR,RBI,SB,OBP,OPS+
+  read_csv("Age,PA,H,HR,RBI,SB,OBP,OPSplus
 ,,,,,,,
 28,289,44,9,32,0,.232,44
 28,487,107,19,63,2,.363,119
@@ -268,10 +268,10 @@ Rays <-
 29,0,0,0,0,0,,")
 ```
 
-### Inputting data from Toronto Blue Jays
+#### Inputting data from Toronto Blue Jays
 ```{r}
 BlueJays <-
-  read_csv("Age,PA,H,HR,RBI,SB,OBP,OPS+
+  read_csv("Age,PA,H,HR,RBI,SB,OBP,OPSplus
 ,,,,,,,
 24,384,72,13,43,0,.279,70
 32,500,86,22,61,0,.342,101
@@ -335,3 +335,62 @@ BlueJays <-
 25,0,0,0,0,0,,
 26,0,0,0,0,0,,")
 ```
+
+# Inspecting Data
+In this part of the analysis, I will be doing do introductory inspection of each data set. For this, I will be using nrow to determine the number of cases in each data set, sorting each data set by descending age, and checking the top 10. This will tell me the 10 oldest players on each team.
+
+#### Inspecting Orioles
+```{r}
+nrow(Orioles)
+```
+
+```{r}
+Orioles %>%
+  arrange(desc(Age)) %>%
+  head(10)
+```
+
+#### Inspecting Red Sox
+```{r}
+nrow(RedSox)
+```
+
+```{r}
+RedSox %>%
+  arrange(desc(Age)) %>%
+  head(10)
+```
+
+#### Inspecting Yankees
+```{r}
+nrow(Yankees)
+```
+
+```{r}
+Yankees %>%
+  arrange(desc(Age)) %>%
+  head(10)
+```
+
+#### Inspecting Rays
+```{r}
+nrow(Rays)
+```
+
+```{r}
+Rays %>%
+  arrange(desc(Age)) %>%
+  head(10)
+```
+
+#### Inspecting Blue Jays
+```{r}
+nrow(BlueJays)
+```
+
+```{r}
+BlueJays %>%
+  arrange(desc(Age)) %>%
+  head(10)
+```
+

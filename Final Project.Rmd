@@ -337,7 +337,7 @@ BlueJays <-
 ```
 
 # Inspecting Data
-In this part of the analysis, I will be doing do introductory inspection of each data set. For this, I will be using nrow to determine the number of cases in each data set, sorting each data set by descending age, and checking the top 10. This will tell me the 10 oldest players on each team.
+In this part of the analysis, I will be doing do introductory inspection of each data set. For this, I will be using nrow to determine the number of cases in each data set, sorting each data set by descending age, and checking the top 10. This will tell me the 10 oldest players on each team, as well as the total number of players included for each team.
 
 #### Inspecting Orioles
 ```{r}
@@ -384,8 +384,10 @@ BlueJays %>%
   head(10)
 ```
 
+As we can see from the introductory analysis, every team seems to generally have a similar number of players, as well as a similar range of ages. There will not be too many outlier for this project, which will make it much easier to visualize the data later on.
+
 # Data Wrangling
-In order to make further judgements of my data, I need to do some data wrangling. In order to do this, I will be joining all five data sets together into one big set. I will do this using the rbind function, as it lets me merge them all in one step. I will be adding a variable called "Team" that will represent each players' team name. I will also be dropping any cases that have an "NA" value, as they will not help our study.
+In order to make further judgements of my data, I need to do some data wrangling. To do this, I will be joining all five data sets together into one big set. I will do this using the rbind function, as it lets me merge them all in one step. I will be adding a variable called "Team" that will represent each players' team name. I will also be dropping any cases that have an "NA" value, as they will not help our study. Once I finish this, I will be creating two new data sets: one will show the averages of stats per team, while the other shows the average stats per age group. 
 
 #### Adding team name to each data set
 ```{r}
@@ -421,8 +423,13 @@ allTeams <-
 allTeams <-
   allTeams[complete.cases(allTeams), ]
 
+allTeams <-
+  allTeams %>%
+  filter(PA >= 30)
+
 allTeams
 ```
+After doing this, I now have a much cleaner data set than I had before. I needed to drop every case with an NA value, because they would end up negatively affecting the averages calculations. The only reason they would have had NA values in the first place is because those players did not record enough significant data to even be used in this analysis. In addition to this, I am also filtering out players with less than 30 plate appearances. Any player with less than this did not accumulate enough significant data for our analysis.
 
 #### Finding average of each stat per team
 ```{r}
@@ -433,19 +440,22 @@ teamsAvg <-
 
 teamsAvg
 ```
+This shows me the average values of each stat for each team. Once again, it seems as though there is not too much variation between each team. Generally speaking however, it seems as though the teams with higher average ages tend to have better batting statistics to go with it. Because of this, we will now compare each stat to individual age group, since it seems to have the greatest effect.
 
 #### Finding averages by ages
 ```{r}
 agesAvg <-
   allTeams %>%
   group_by(Age) %>%
-  summarise(avgHits = mean(H), avgPA = mean(PA), avgHR = mean(HR), avgRBI = mean(RBI), avgSB = mean(SB), avgOBP = mean(OBP), avgOPSplus = mean(OPSplus))
+  summarise(avgHits = mean(H), avgPA = mean(PA), avgHR = mean(HR), avgRBI = mean(RBI), avgSB = mean(SB), avgOBP = mean(OBP), avgOPSplus = mean(OPSplus), count = n()) %>%
+  filter(count >= 5)
 
 agesAvg
 ```
+This finally gives us the data set we will be working with when we do the final data visualization step. This will allow us to see the way in which age affects the player's overall batting stats. Having the count variable also lets us leave out ages without significant data.
 
 # Data Visualization
-In this step, I will try to use several different types of graphs to showcase how these variables are affected by each other. For this chart, I have chosen to use the OPS+ statistic to compare to age. I chose this because OPS+ does the best job of evaluating a player's overall hiting.
+In this step, I will try to use several different types of graphs to showcase how these variables are affected by each other. Specifically, I will be looking at how OPS+ compares to these variables. OPS+ is a baseball statistic that essentially looks at how a player's overall batting statistics compare to the rest of the league. An OPS+ value of 100 is considered a league-average hitter. This will make hitting ability easy to visualize in graphs.
 
 #### Comparing team to OPS+
 ```{r}
@@ -454,10 +464,25 @@ allTeams %>%
   geom_boxplot() + theme(axis.text.y = element_text(angle = 30, hjust = 1)) +
   coord_flip()
 ```
+As we can see from this chart, there is a bit of variation between each team's OPS+ values. We can see the Yankees generally had the highest values, while the Orioles generally had the lowest. This makes sense, as we know the Yankees won the American League East division, while the Orioles finished in last place. Though as we saw earlier, this does not tell the whole story. The Yankees were also a generally older team than the Orioles, so next we will see how each age group specifically affected overall batting performance.
 
 #### Comparing age to avg OPS+
 ```{r}
 agesAvg %>%
-  ggplot(aes(x = Age, y = avgOPSplus)) +
-  geom_bar(stat="identity") + ylim(0, 150) + theme(axis.text.x = element_text(angle = 30, hjust = 1)) + geom_line(color = "red")
+  ggplot(aes(x = Age, y = avgOPSplus), y_sc) +
+  geom_bar(stat="identity") + theme(axis.text.x = element_text(angle = 30, hjust = 1)) + geom_line(color = "blue")
 ```
+As we can generally see here, there is not much we can gather from this chart. The data values are too close together for us to make any assumptions. It doesn't seem like there is much variation between the ages, so instead we will look at a box plot to see if we can learn anything else.
+
+#### Box plot of age vs OPS+
+```{r}
+allTeams %>%
+  group_by(Age) %>%
+  mutate(count = n()) %>%
+  filter(count >= 5) %>%
+  ggplot(aes(x = Age, y = OPSplus, group = Age)) +
+  geom_boxplot()
+```
+Now we can see the information we really want. Grouping the general population by age and checking to see the OPS+ with respect to these groups allows us to see the differences going on here.
+
+# Concluding analysis

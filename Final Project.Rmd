@@ -342,9 +342,7 @@ In this part of the analysis, I will be doing do introductory inspection of each
 #### Inspecting Orioles
 ```{r}
 nrow(Orioles)
-```
 
-```{r}
 Orioles %>%
   arrange(desc(Age)) %>%
   head(10)
@@ -353,9 +351,7 @@ Orioles %>%
 #### Inspecting Red Sox
 ```{r}
 nrow(RedSox)
-```
 
-```{r}
 RedSox %>%
   arrange(desc(Age)) %>%
   head(10)
@@ -364,9 +360,7 @@ RedSox %>%
 #### Inspecting Yankees
 ```{r}
 nrow(Yankees)
-```
 
-```{r}
 Yankees %>%
   arrange(desc(Age)) %>%
   head(10)
@@ -375,9 +369,7 @@ Yankees %>%
 #### Inspecting Rays
 ```{r}
 nrow(Rays)
-```
 
-```{r}
 Rays %>%
   arrange(desc(Age)) %>%
   head(10)
@@ -386,11 +378,50 @@ Rays %>%
 #### Inspecting Blue Jays
 ```{r}
 nrow(BlueJays)
-```
 
-```{r}
 BlueJays %>%
   arrange(desc(Age)) %>%
   head(10)
 ```
 
+# Data Wrangling
+
+## Joining
+In order to make further judgements of my data, I need to do some data wrangling. In order to do this, I will be joining all five data sets together into one big set. I will do this using the rbind function, as it lets me merge them all in one step. I will be adding a variable called "Team" that will represent each players' team name. I will also be dropping any cases that have an "NA" value, as they will not help our study.
+
+#### Adding team name to each data set
+```{r}
+Orioles <-
+  Orioles %>%
+  mutate(Team = "Orioles")
+
+RedSox <-
+  RedSox %>%
+  mutate(Team = "Red Sox")
+
+Yankees <-
+  Yankees %>%
+  mutate(Team = "Yankees")
+
+Rays <-
+  Rays %>%
+  mutate(Team = "Rays")
+
+BlueJays <-
+  BlueJays %>%
+  mutate(Team = "Blue Jays")
+```
+
+#### Joining the teams together
+```{r}
+allTeams <-
+  rbind(Orioles, RedSox, Yankees, Rays, BlueJays)
+```
+
+#### Dropping any cases with NA
+```{r}
+allTeams <-
+  allTeams[complete.cases(allTeams), ]
+
+allTeams
+```
